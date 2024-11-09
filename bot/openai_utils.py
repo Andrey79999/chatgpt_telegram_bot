@@ -47,6 +47,8 @@ class Assistant:
 
         self.logger = LoggerFactory(config).create_logger(__name__)
         self.client = AsyncOpenAI(api_key=config.openai_api_key)
+        if config.base_url is not None:
+            self.client.base_url = config.base_url
         self.should_stream = config.enable_message_streaming
         self.chat_modes = chat_modes
         self.model = model

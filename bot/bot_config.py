@@ -10,6 +10,7 @@ class BotConfig:
 
         self.telegram_token = os.getenv("TELEGRAM_TOKEN")
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
+        self.base_url = os.getenv("BASE_URL")
 
         self.bot_admin_id = int(os.getenv("BOT_ADMIN_ID") or -1)
         self.allowed_telegram_usernames = (os.getenv("ALLOWED_TELEGRAM_USERNAMES") or "").split(",")
