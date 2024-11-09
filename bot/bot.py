@@ -683,7 +683,7 @@ class Bot:
                 prompt=message_text,
                 n_images=self.config.return_n_generated_images)
 
-        except openai.error.InvalidRequestError as e:
+        except openai.BadRequestError as e:
             if str(e).startswith(openai_utils.OPENAI_INVALID_REQUEST_PREFIX):
                 language = telegram_utils.get_language(update)
                 reply_text = self.resources.invalid_request(language)
