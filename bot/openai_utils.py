@@ -243,18 +243,16 @@ class Assistant:
     def _encode_image(self, image: BytesIO) -> str:
         return base64.b64encode(image.read()).decode("utf-8")
 
+    async def generate_images(self, prompt, n_images=4) -> List:
+        r = await self.client.images.generate(prompt=prompt, n=n_images, size="512x512")
+        image_urls = [item.url for item in r.data]
+        return image_urls
+
 
 # TODO: Migrate to openai 1.x
 async def transcribe_audio(audio_file) -> str:
     transcription = openai.audio.transcriptions.create(file=audio_file, model='whisper-1')
     return transcription.text
-
-
-# TODO: Migrate to openai 1.x
-async def generate_images(prompt, n_images=4) -> List:
-    r = await openai.Image.acreate(prompt=prompt, n=n_images, size="512x512")
-    image_urls = [item.url for item in r.data]
-    return image_urls
 
 
 async def is_content_acceptable(prompt):

@@ -679,7 +679,11 @@ class Bot:
             return
 
         try:
-            image_urls = await openai_utils.generate_images(
+            assistant = Assistant(
+                config=self.config,
+                chat_modes=self.chat_modes,
+            )
+            image_urls = await assistant.generate_images(
                 prompt=message_text,
                 n_images=self.config.return_n_generated_images)
 
