@@ -1,4 +1,4 @@
-available_text_models: ["gpt-4o-mini", "gpt-4o"]
+available_text_models: ["gpt-4o-mini", "gpt-4o", "gpt-4o-2024-05-13"]
 
 info:
   gpt-4o-mini:
@@ -7,7 +7,7 @@ info:
     description: GPT-4o mini is OpenAI's <b>most cost-efficient</b> small model that’s smarter and cheaper than GPT-3.5 Turbo, and has vision capabilities. The model has 128K context and an October 2023 knowledge cutoff.
 
     scores:
-      Smart: 4
+      Smart: 3
       Fast: 5
       Cheap: 5
 
@@ -21,9 +21,19 @@ info:
       Fast: 4
       Cheap: 3
 
+  gpt-4o-2024-05-13:
+    type: chat_completion
+    name: GPT-4o-2024-05-13
+    description: ""
+
+    scores:
+      Smart: 5
+      Fast: 4
+      Cheap: 2
+
   dalle-2:
      type: image
-     price_per_1_image: 0.018  # 512x512
+     price_per_1_image: 5.76  # 512x512
 
   whisper:
     type: audio
