@@ -5,6 +5,7 @@ __pycache__/
 
 .vscode
 .pylintrc
+.idea
 
 config/config.yml
 config/config.env
