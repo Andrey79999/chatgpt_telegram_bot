@@ -1,10 +1,11 @@
 import base64
 from io import BytesIO
-from typing import Optional, List, AsyncGenerator
+from typing import Optional, List, AsyncGenerator, Any, Coroutine
 from dataclasses import dataclass
 
 import openai
 from openai import AsyncOpenAI
+from openai.types.audio import Transcription
 
 from bot_config import BotConfig
 from chat_modes.chat_modes import ChatModes
@@ -248,11 +249,9 @@ class Assistant:
         image_urls = [item.url for item in r.data]
         return image_urls
 
-
-# TODO: Migrate to openai 1.x
-async def transcribe_audio(audio_file) -> str:
-    transcription = openai.audio.transcriptions.create(file=audio_file, model='whisper-1')
-    return transcription.text
+    async def transcribe_audio(self, audio_file) -> str:
+        transcription = await self.client.audio.transcriptions.create(file=audio_file, model='whisper-1')
+        return transcription.text
 
 
 async def is_content_acceptable(prompt):

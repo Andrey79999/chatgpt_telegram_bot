@@ -319,16 +319,20 @@ class Bot:
         if update.message.effective_attachment:
             # TODO: Extract all the images
 
-            # get the last attachment which has the best quality
-            image_attachment = update.message.effective_attachment[-1]
-            image_file = await context.bot.get_file(image_attachment.file_id)
+            # TODO: Error sending voice messages
+            try:
+                # get the last attachment which has the best quality
+                image_attachment = update.message.effective_attachment[-1]
+                image_file = await context.bot.get_file(image_attachment.file_id)
 
-            image_bytes = io.BytesIO()
-            await image_file.download_to_memory(image_bytes)
-            image_bytes.seek(0)
+                image_bytes = io.BytesIO()
+                await image_file.download_to_memory(image_bytes)
+                image_bytes.seek(0)
 
-            image_base64 = base64.b64encode(image_bytes.read()).decode("utf-8")
-            message_images.append(DialogMessageImage(base64=image_base64))
+                image_base64 = base64.b64encode(image_bytes.read()).decode("utf-8")
+                message_images.append(DialogMessageImage(base64=image_base64))
+            except Exception as e:
+                self.logger.error(e)
 
         async def message_handle_fn():
             if update.message is None:
@@ -633,9 +637,15 @@ class Bot:
             pydub.AudioSegment.from_file(voice_ogg_path).export(
                 voice_mp3_path, format="mp3")
 
+            current_model = self.db.get_current_model(user_id)
+            assistant = Assistant(
+                config=self.config,
+                chat_modes=self.chat_modes,
+                model=current_model
+            )
             # transcribe
             with open(voice_mp3_path, "rb") as f:
-                transcribed_text = await openai_utils.transcribe_audio(f) or ""
+                transcribed_text = await assistant.transcribe_audio(f) or ""
 
         reply_text = f"🎤: <i>{transcribed_text}</i>"
         await update.message.reply_text(reply_text, parse_mode=ParseMode.HTML)
