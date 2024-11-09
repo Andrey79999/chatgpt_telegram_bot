@@ -308,7 +308,7 @@ class Bot:
             return
 
         # Check the model if there is an image sent
-        if update.message.effective_attachment and current_model not in ["gpt-4o", "gpt-4o-mini"]:
+        if update.message.effective_attachment and current_model not in ["gpt-4o", "gpt-4o-mini", "gpt-4o-2024-05-13"]:
             self.logger.debug("Attempting to use Vision features with unsupported model")
             reply_text = "👀 Change the model to <b>GPT-4o</b> or <b>GPT-4o mini</b> to use Vision features."
             await update.message.reply_text(reply_text, parse_mode=ParseMode.HTML)
@@ -1098,7 +1098,7 @@ class Bot:
             BotCommand("/mode", self.resources.get_mode_command_title(command_language)),
             BotCommand("/retry", self.resources.get_retry_command_title(command_language)),
             BotCommand("/usage", self.resources.get_usage_command_title(command_language)),
-            # BotCommand("/model", self.resources.get_model_command_title(command_language)),
+            BotCommand("/model", self.resources.get_model_command_title(command_language)),
             BotCommand("/help", self.resources.get_help_command_title(command_language)),
         ], language_code=user_language)
 
