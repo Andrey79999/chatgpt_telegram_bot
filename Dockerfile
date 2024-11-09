@@ -1,30 +1,23 @@
 FROM python:3.11-slim
 
-ENV PYTHONFAULTHANDLER=1
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONHASHSEED=random
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PIP_NO_CACHE_DIR=off
-ENV PIP_DISABLE_PIP_VERSION_CHECK=on
-ENV PIP_DEFAULT_TIMEOUT=100
-
-ENV ALLOWED_TELEGRAM_USERNAMES=${ALLOWED_TELEGRAM_USERNAMES}
-ENV BOT_ADMIN_ID=${BOT_ADMIN_ID}
-ENV NEW_DIALOG_TIMEOUT=${NEW_DIALOG_TIMEOUT}
-
-ENV LOG_LEVEL=${LOG_LEVEL}
-
-ENV TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
-ENV OPENAI_API_KEY=${OPENAI_API_KEY}
-ENV FIREBASE_CREDENTIALS=${FIREBASE_CREDENTIALS}
-
 RUN apt-get update
-RUN apt-get install -y python3 python3-pip build-essential python3-venv ffmpeg
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends build-essential python3-venv python3-pip ffmpeg && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /code
-ADD . /code
+COPY requirements.txt /code/requirements.txt
+RUN pip install --no-cache-dir -r /code/requirements.txt
+
+COPY . /code
 WORKDIR /code
 
-RUN pip3 install -r requirements.txt
+ENV ALLOWED_TELEGRAM_USERNAMES=${ALLOWED_TELEGRAM_USERNAMES} \
+    BOT_ADMIN_ID=${BOT_ADMIN_ID} \
+    NEW_DIALOG_TIMEOUT=${NEW_DIALOG_TIMEOUT} \
+    LOG_LEVEL=${LOG_LEVEL} \
+    TELEGRAM_TOKEN=${TELEGRAM_TOKEN} \
+    OPENAI_API_KEY=${OPENAI_API_KEY} \
+    FIREBASE_CREDENTIALS=${FIREBASE_CREDENTIALS} \
+    BASE_URL=${BASE_URL}
 
 CMD ["python3", "bot/bot.py"]
